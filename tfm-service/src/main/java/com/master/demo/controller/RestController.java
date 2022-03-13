@@ -1,15 +1,13 @@
 package com.master.demo.controller;
 
-import com.example.api.LibraryApi;
-import com.example.models.Book;
+
+import com.master.demo.service.ObjetoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-public class RestController implements LibraryApi {
+@org.springframework.web.bind.annotation.RestController
+public class RestController {
 
-    @Override
-    public ResponseEntity<List<Book>> getAllBooksInLibrary() {
-        return null;
-    }
 }

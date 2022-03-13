@@ -11,9 +11,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
 @SpringBootApplication
-@EnableJpaRepositories(basePackages="com.master.demo.Repositories")
+@EnableJpaRepositories(basePackages={"com.master.demo.Repositories"})
 @EnableTransactionManagement
-@EntityScan(basePackages="com.master.demo.Entities")
+@EntityScan(basePackages={"com.master.demo.Entities"})
 public class DemoApplication {
 
 	public static void main(String[] args) {

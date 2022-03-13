@@ -2,43 +2,88 @@ openapi: 3.0.0
 
 info:
   version: 0.0.1
-  title: Library Service
-  description: The library service
+  title: TFM Service
+  description: The tfm service
+
+servers:
+  - url: http://localhost:8080/
+    description: API location
 
 tags:
-  - name: "Library"
+  - name: "Objetos"
+  - name: "Partidas"
 
 
 paths:
 
-  /library/books:
-    get:
-      summary: This is summary
+  /objetos:
+
+    post:
+      summary: añadir objeto
       tags:
-        - "Library"
+        - "Objetos"
       description: This is a description
-      operationId: getAllBooksInLibrary
+      operationId: createObject
+      requestBody:
+        description: description
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ObjectDTO'
+      responses:
+        "201":
+          description: CREATED
+    get:
+      summary: Devuelve todos los objetos.
+      tags:
+        - "Objetos"
+      description: This is a description
+      operationId: getAllObjects
       responses:
         "200":
-          description: This means its ok
+          description: ok
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Book'
+                  $ref: '#/components/schemas/ObjectDTO'
+        "400":
+          description: BAD REQUEST
+        "401":
+          description: UNAUTH
 
 components:
 
   schemas:
 
-    Book:
-      description: This is the book model
+    ObjectDTO:
+      description: This is the object model
       type: object
+      required:
+        - idObjeto
+        - idVersion
+        - nombre
       properties:
-        name:
-          description: The name of book
+        idObjeto:
+          description: id del objeto
+          type: integer
+        idVersion:
+          description: version actual del objeto
+          type: integer
+        nombre:
+          description: nombre del objeto
           type: string
-        bookAuthor:
-          description: name of author
-          type: string
+
+
+
+
+
+
+
+
+
+
+
+
