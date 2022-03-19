@@ -1,33 +1,25 @@
 package com.master.demo.Entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
-@Entity // This tells Hibernate to make a table out of this class
-public class Partida {
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer id;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+public class PartidaKafka {
+    @JsonProperty("idPartida")
     private Integer idPartida;
+    @JsonProperty("informacion")
     private String informacion;
+    @JsonProperty("gastos")
     private String gastos;
 
-    public Partida(Integer idPartida, String gastos, String informacion){
+    public PartidaKafka(Integer idPartida, String gastos, String informacion){
         this.idPartida = idPartida;
         this.gastos = gastos;
         this.informacion = informacion;
 
     }
 
-    public Integer getId() {
-        return id;
-    }
+    public PartidaKafka(){
 
-    public void setId(Integer id) {
-        this.id = id;
     }
     public Integer getIdPartida() {
         return idPartida;

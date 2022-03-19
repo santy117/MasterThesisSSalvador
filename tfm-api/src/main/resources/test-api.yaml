@@ -53,6 +53,24 @@ paths:
           description: BAD REQUEST
         "401":
           description: UNAUTH
+  /partidas:
+
+    post:
+      summary: añadir partida
+      tags:
+        - "Partidas"
+      description: This is a description
+      operationId: insertPartida
+      requestBody:
+        description: description
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartidaDTO'
+      responses:
+        "201":
+          description: CREATED
 
 components:
 
@@ -75,15 +93,20 @@ components:
         nombre:
           description: nombre del objeto
           type: string
-
-
-
-
-
-
-
-
-
-
-
-
+    PartidaDTO:
+      description: This is the partida model
+      type: object
+      required:
+        - idPartida
+        - gastos
+        - informacion
+      properties:
+        idPartida:
+          description: id de la partida
+          type: integer
+        gastos:
+          description: gastos de la partida
+          type: string
+        informacion:
+          description: informacion de la partida
+          type: string
