@@ -48,7 +48,57 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ObjectDTO'
+                  $ref: '#/components/schemas/ObjectResponseDTO'
+        "400":
+          description: BAD REQUEST
+        "401":
+          description: UNAUTH
+  /objetos/{objectId}:
+    parameters:
+      - name: objectId
+        description: object id
+        schema:
+          type: integer
+        in: path
+        required: true
+    get:
+      summary: Devuelve objeto por id objeto.
+      tags:
+        - "Objetos"
+      description: This is a description
+      operationId: getObjectById
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectResponseDTO'
+        "400":
+          description: BAD REQUEST
+        "401":
+          description: UNAUTH
+  /objetos/version/{versionId}:
+    parameters:
+      - name: versionId
+        description: version id
+        schema:
+          type: integer
+        in: path
+        required: true
+    get:
+      summary: Devuelve objeto por id version.
+      tags:
+        - "Objetos"
+      description: This is a description
+      operationId: getObjectByVersionId
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectResponseDTO'
         "400":
           description: BAD REQUEST
         "401":
@@ -71,6 +121,58 @@ paths:
       responses:
         "201":
           description: CREATED
+  /partidas/{partidaId}:
+    parameters:
+      - name: partidaId
+        description: partida id
+        schema:
+          type: integer
+        in: path
+        required: true
+    get:
+      summary: Devuelve partida por id de partida
+      tags:
+        - "Partidas"
+      description: This is a description
+      operationId: getPartidaById
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartidaResponseDTO'
+        "400":
+          description: BAD REQUEST
+        "401":
+          description: UNAUTH
+  /partidas/version/{versionId}:
+    parameters:
+      - name: versionId
+        description: version id
+        schema:
+          type: integer
+        in: path
+        required: true
+    get:
+      summary: Devuelve todas las partidas de una version.
+      tags:
+        - "Partidas"
+      description: This is a description
+      operationId: getPartidasByVersion
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PartidaResponseDTO'
+        "400":
+          description: BAD REQUEST
+        "401":
+          description: UNAUTH
 
 components:
 
@@ -82,6 +184,23 @@ components:
       required:
         - nombre
       properties:
+        nombre:
+          description: nombre del objeto
+          type: string
+    ObjectResponseDTO:
+      description: This is the object model
+      type: object
+      required:
+        - nombre
+        - idObjeto
+        - idVersion
+      properties:
+        idObjeto:
+          description: id del objeto
+          type: integer
+        idVersion:
+          description: version del objeto
+          type: integer
         nombre:
           description: nombre del objeto
           type: string
@@ -102,3 +221,25 @@ components:
         informacion:
           description: informacion de la partida
           type: string
+    PartidaResponseDTO:
+      description: This is the partida response model
+      type: object
+      required:
+        - idPartida
+        - idVersion
+        - gastos
+        - informacion
+      properties:
+        idPartida:
+          description: id de la partida
+          type: integer
+        idVersion:
+          description: id de la version
+          type: integer
+        gastos:
+          description: gastos de la partida
+          type: string
+        informacion:
+          description: informacion de la partida
+          type: string
+
