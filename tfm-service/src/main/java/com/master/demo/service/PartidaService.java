@@ -1,5 +1,5 @@
 package com.master.demo.service;
 
 public interface PartidaService {
-    void insertarPartida( Integer idPartida, String gastos, String informacion);
+    void insertarPartida( Integer idVersion, String gastos, String informacion);
 }

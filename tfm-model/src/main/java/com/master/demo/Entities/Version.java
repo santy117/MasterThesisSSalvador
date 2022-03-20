@@ -1,43 +1,28 @@
 package com.master.demo.Entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 
 @Entity // This tells Hibernate to make a table out of this class
+@Data
+@Table(name = "VERSION")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Version {
+
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer id;
-
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name= "ID_VERSION")
     private Integer idVersion;
-    private Integer idPartida;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    @Column(name= "ID_OBJETO")
+    private Integer idObjeto;
 
 
-    public Integer getIdVersion() {
-        return idVersion;
-    }
 
-    public void setIdVersion(Integer idVersion) {
-        this.idVersion = idVersion;
-
-    }
-
-    public Integer getIdPartida() {
-        return idVersion;
-    }
-
-    public void setIdPartida(Integer idPartida) {
-        this.idPartida = idPartida;
-
-    }
 }

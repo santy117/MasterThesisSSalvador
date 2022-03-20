@@ -21,7 +21,7 @@ public class PartidasController implements PartidasApi {
 
     @Override
     public ResponseEntity<Void> insertPartida(PartidaDTO body) {
-        this.partidaService.insertarPartida(body.getIdPartida(),body.getGastos(), body.getInformacion());
+        this.partidaService.insertarPartida(body.getIdVersion(),body.getGastos(), body.getInformacion());
         return null;
     }
 }

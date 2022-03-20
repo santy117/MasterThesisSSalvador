@@ -45,7 +45,7 @@ public class ObjetosController implements ObjetosApi {
 
     @Override
     public ResponseEntity<Void> createObject(ObjectDTO body) {
-        this.objetoService.createObject(body.getIdObjeto(),body.getIdVersion(),body.getNombre());
+        this.objetoService.createObject(body.getNombre());
         return null;
     }
 

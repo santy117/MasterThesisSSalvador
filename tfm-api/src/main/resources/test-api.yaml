@@ -80,16 +80,8 @@ components:
       description: This is the object model
       type: object
       required:
-        - idObjeto
-        - idVersion
         - nombre
       properties:
-        idObjeto:
-          description: id del objeto
-          type: integer
-        idVersion:
-          description: version actual del objeto
-          type: integer
         nombre:
           description: nombre del objeto
           type: string
@@ -97,12 +89,12 @@ components:
       description: This is the partida model
       type: object
       required:
-        - idPartida
+        - idVersion
         - gastos
         - informacion
       properties:
-        idPartida:
-          description: id de la partida
+        idVersion:
+          description: id de la version
           type: integer
         gastos:
           description: gastos de la partida

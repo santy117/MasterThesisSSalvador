@@ -1,56 +1,31 @@
 package com.master.demo.Entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 
 @Entity // This tells Hibernate to make a table out of this class
+@Data
+@Table(name = "PARTIDA")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Partida {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer id;
-
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name= "ID_PARTIDA")
     private Integer idPartida;
+
+    @ManyToOne
+    @JoinColumn(name= "ID_VERSION")
+    Version version;
+
+    @Column(name= "INFORMACION")
     private String informacion;
+
+    @Column(name= "GASTOS")
     private String gastos;
-
-    public Partida(Integer idPartida, String gastos, String informacion){
-        this.idPartida = idPartida;
-        this.gastos = gastos;
-        this.informacion = informacion;
-
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-    public Integer getIdPartida() {
-        return idPartida;
-    }
-
-    public void setIdPartida(Integer idPartida) {
-        this.idPartida = idPartida;
-    }
-
-
-    public String getInformacion() {
-        return informacion;
-    }
-
-    public void setInformacion(String informacion) {
-        this.informacion = informacion;
-    }
-
-    public String getGastos() {
-        return gastos;
-    }
-
-    public void setGastos(String gastos) {
-        this.gastos = gastos;
-    }
 }
