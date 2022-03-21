@@ -18,7 +18,7 @@ public class KafkaProducer {
     private KafkaTemplate<String, Object> kafkaTemplate;
 
     public void writeMessage(PartidaKafka partida){
-        System.out.println(partida.getIdPartida());
+        System.out.println(partida.getIdVersion());
         this.kafkaTemplate.send(TOPIC, partida);
 
     }

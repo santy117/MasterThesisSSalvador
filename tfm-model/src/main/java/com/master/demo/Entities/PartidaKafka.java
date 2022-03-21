@@ -4,15 +4,15 @@ package com.master.demo.Entities;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PartidaKafka {
-    @JsonProperty("idPartida")
-    private Integer idPartida;
+    @JsonProperty("idVersion")
+    private Integer idVersion;
     @JsonProperty("informacion")
     private String informacion;
     @JsonProperty("gastos")
     private String gastos;
 
-    public PartidaKafka(Integer idPartida, String gastos, String informacion){
-        this.idPartida = idPartida;
+    public PartidaKafka(Integer idVersion, String gastos, String informacion){
+        this.idVersion = idVersion;
         this.gastos = gastos;
         this.informacion = informacion;
 
@@ -21,12 +21,12 @@ public class PartidaKafka {
     public PartidaKafka(){
 
     }
-    public Integer getIdPartida() {
-        return idPartida;
+    public Integer getIdVersion() {
+        return idVersion;
     }
 
-    public void setIdPartida(Integer idPartida) {
-        this.idPartida = idPartida;
+    public void setIdVersion(Integer idVersion) {
+        this.idVersion = idVersion;
     }
 
 

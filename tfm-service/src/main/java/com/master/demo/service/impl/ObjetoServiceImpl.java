@@ -62,4 +62,14 @@ public class ObjetoServiceImpl implements ObjetoService {
         objectResponseDTO.setNombre(objeto.get().getNombre());
         return objectResponseDTO;
     }
+
+    @Override
+    public ObjectResponseDTO getObjectByIdVersion(Integer versionId) {
+        Objeto objeto = this.objetoRepository.findByIdVersion(versionId);
+        ObjectResponseDTO objectResponseDTO = new ObjectResponseDTO();
+        objectResponseDTO.setIdObjeto(objeto.getIdObjeto());
+        objectResponseDTO.setIdVersion(objeto.getIdVersion().getIdVersion());
+        objectResponseDTO.setNombre(objeto.getNombre());
+        return objectResponseDTO;
+    }
 }

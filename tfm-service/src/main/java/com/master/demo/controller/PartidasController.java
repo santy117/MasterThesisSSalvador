@@ -2,10 +2,12 @@ package com.master.demo.controller;
 
 
 import com.example.api.PartidasApi;
+import com.example.models.ObjectResponseDTO;
 import com.example.models.PartidaDTO;
 import com.example.models.PartidaResponseDTO;
 import com.master.demo.service.PartidaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,16 +22,16 @@ public class PartidasController implements PartidasApi {
     private PartidaService partidaService;
 
 
-    //TODO: implementar metodo
     @Override
     public ResponseEntity<PartidaResponseDTO> getPartidaById(Integer partidaId) {
-        return null;
+        PartidaResponseDTO partidaResponse = this.partidaService.getPartidaByIdPartida(partidaId);
+        return new ResponseEntity<>(partidaResponse, HttpStatus.OK);
     }
 
-    //TODO: implementar metodo
     @Override
     public ResponseEntity<List<PartidaResponseDTO>> getPartidasByVersion(Integer versionId) {
-        return null;
+        List<PartidaResponseDTO> partidaResponse = this.partidaService.getPartidasByIdVersion(versionId);
+        return new ResponseEntity<>(partidaResponse, HttpStatus.OK);
     }
 
     @Override

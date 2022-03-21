@@ -19,6 +19,6 @@ public class KafkaConsumer{
     @KafkaListener(topics="my_topic", groupId="my_group_id")
     public void getMessage(PartidaKafka partida){
         System.out.println("Message received: " + partida);
-        this.partidaService.insertarPartida(partida.getIdPartida(),partida.getGastos(), partida.getInformacion());
+        this.partidaService.insertarPartida(partida.getIdVersion(),partida.getGastos(), partida.getInformacion());
     }
 }

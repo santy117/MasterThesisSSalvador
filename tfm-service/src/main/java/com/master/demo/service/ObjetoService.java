@@ -13,4 +13,6 @@ public interface ObjetoService {
     void createObject(String nombre);
 
     ObjectResponseDTO getObjectById(Integer objectId);
+
+    ObjectResponseDTO getObjectByIdVersion(Integer versionId);
 }

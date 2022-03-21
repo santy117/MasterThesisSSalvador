@@ -38,10 +38,10 @@ public class ObjetosController implements ObjetosApi {
         return new ResponseEntity<>(objectResponse, HttpStatus.OK);
     }
 
-    //TODO: implementar metodo
     @Override
     public ResponseEntity<ObjectResponseDTO> getObjectByVersionId(Integer versionId) {
-        return null;
+        ObjectResponseDTO objectResponse = this.objetoService.getObjectByIdVersion(versionId);
+        return new ResponseEntity<>(objectResponse, HttpStatus.OK);
     }
 
 }
