@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -32,6 +33,12 @@ public class PartidasController implements PartidasApi {
     public ResponseEntity<List<PartidaResponseDTO>> getPartidasByVersion(Integer versionId) {
         List<PartidaResponseDTO> partidaResponse = this.partidaService.getPartidasByIdVersion(versionId);
         return new ResponseEntity<>(partidaResponse, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Void> importarPartidas(MultipartFile file) {
+        this.partidaService.importarPartidas(file);
+        return null;
     }
 
     @Override

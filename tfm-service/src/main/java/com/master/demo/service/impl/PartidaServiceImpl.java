@@ -4,28 +4,37 @@ import com.example.models.ObjectResponseDTO;
 import com.example.models.PartidaResponseDTO;
 import com.master.demo.Entities.Objeto;
 import com.master.demo.Entities.Partida;
+import com.master.demo.Entities.PartidaKafka;
 import com.master.demo.Entities.Version;
+import com.master.demo.Kafka.KafkaProducer;
 import com.master.demo.Repositories.PartidaRepository;
 import com.master.demo.Repositories.VersionRepository;
 import com.master.demo.service.PartidaService;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class PartidaServiceImpl implements PartidaService {
 
-    private PartidaRepository partidaRepository;
-    private VersionRepository versionRepository;
+    private final PartidaRepository partidaRepository;
+    private final VersionRepository versionRepository;
+    private final KafkaProducer kafkaProducer;
 
     @Autowired
-    public PartidaServiceImpl(final PartidaRepository partidaRepository, final VersionRepository versionRepository){
+    public PartidaServiceImpl(final PartidaRepository partidaRepository, final VersionRepository versionRepository, final KafkaProducer kafkaProducer){
         this.partidaRepository = partidaRepository;
         this.versionRepository = versionRepository;
+        this.kafkaProducer = kafkaProducer;
     }
 
     @Override
@@ -63,5 +72,54 @@ public class PartidaServiceImpl implements PartidaService {
             partidasResponseDTO.add(partidaResponseDTO);
         });
         return partidasResponseDTO;
+    }
+
+    @Override
+    public void importarPartidas(MultipartFile file) {
+        try{
+            Workbook workbook = new XSSFWorkbook(file.getInputStream());
+            Sheet datatypeSheet = workbook.getSheetAt(0);
+            Iterator<Row> iterator = datatypeSheet.iterator();
+            List<PartidaKafka> listaPartidas = new ArrayList<PartidaKafka>();
+            while (iterator.hasNext()) {
+                PartidaKafka partida = new PartidaKafka();
+                Row currentRow = iterator.next();
+                Iterator<Cell> cellIterator = currentRow.iterator();
+                if(currentRow.getRowNum()>0){
+                    while (cellIterator.hasNext()) {
+                        Cell currentCell = cellIterator.next();
+                        int columna =  currentCell.getAddress().getColumn();
+                        switch (columna){
+                            case 0:
+                                int idVersion = (int) currentCell.getNumericCellValue();
+                                partida.setIdVersion(idVersion);
+                                break;
+
+                            case 1:
+                                String gastos = currentCell.getStringCellValue();
+                                partida.setGastos(gastos);
+                                break;
+
+                            case 2:
+                                String informacion = currentCell.getStringCellValue();
+                                partida.setInformacion(informacion);
+                                break;
+                        }
+
+
+                    }
+                    listaPartidas.add(partida);
+                }
+
+            }
+            listaPartidas.forEach(partida -> {
+                System.out.println("Partida: "+partida.getIdVersion()+ " - "+partida.getGastos()+" - "+partida.getInformacion());
+
+            });
+            this.kafkaProducer.insertPartidas(listaPartidas);
+        }catch(final IOException e){
+            e.printStackTrace();
+        }
+
     }
 }

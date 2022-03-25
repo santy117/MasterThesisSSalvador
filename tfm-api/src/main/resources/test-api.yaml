@@ -121,6 +121,30 @@ paths:
       responses:
         "201":
           description: CREATED
+  /partidas/importarPartidas:
+
+    post:
+      summary: añadir partidas
+      tags:
+        - "Partidas"
+      description: This is a description
+      operationId: importarPartidas
+      requestBody:
+        description: description
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "201":
+          description: CREATED
+        "200":
+          description: OK
   /partidas/{partidaId}:
     parameters:
       - name: partidaId

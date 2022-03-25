@@ -9,6 +9,8 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class KafkaProducer {
 
@@ -21,6 +23,10 @@ public class KafkaProducer {
         System.out.println(partida.getIdVersion());
         this.kafkaTemplate.send(TOPIC, partida);
 
+    }
+
+    public void insertPartidas(List<PartidaKafka> partidas){
+        partidas.forEach(partida -> this.kafkaTemplate.send(TOPIC, partida));
     }
 
 }

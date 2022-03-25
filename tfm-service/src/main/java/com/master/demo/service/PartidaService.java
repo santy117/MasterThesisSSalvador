@@ -1,6 +1,7 @@
 package com.master.demo.service;
 
 import com.example.models.PartidaResponseDTO;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -10,4 +11,6 @@ public interface PartidaService {
     PartidaResponseDTO getPartidaByIdPartida(Integer partidaId);
 
     List<PartidaResponseDTO> getPartidasByIdVersion(Integer versionId);
+
+    void importarPartidas(MultipartFile file);
 }
