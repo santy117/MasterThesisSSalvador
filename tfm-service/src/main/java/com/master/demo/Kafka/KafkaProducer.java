@@ -1,5 +1,6 @@
 package com.master.demo.Kafka;
 
+import com.master.demo.Entities.Notificacion;
 import com.master.demo.Entities.Partida;
 import com.master.demo.Entities.PartidaKafka;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import java.util.List;
 public class KafkaProducer {
 
     private static final String TOPIC= "my_topic";
+    private static final String TOPIC_NOTIFICACIONES= "my_topic2";
 
     @Autowired
     private KafkaTemplate<String, Object> kafkaTemplate;
@@ -27,6 +29,10 @@ public class KafkaProducer {
 
     public void insertPartidas(List<PartidaKafka> partidas){
         partidas.forEach(partida -> this.kafkaTemplate.send(TOPIC, partida));
+    }
+    public void insertNotificacion(Notificacion notificacion){
+        System.out.println("Insertando notificacion: "+ notificacion.getMensaje());
+        this.kafkaTemplate.send(TOPIC_NOTIFICACIONES, notificacion);
     }
 
 }

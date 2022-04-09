@@ -1,6 +1,6 @@
 package com.master.demo.Repositories;
 
-import com.master.demo.Entities.Objeto;
+
 import com.master.demo.Entities.Partida;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

@@ -2,10 +2,7 @@ package com.master.demo.service.impl;
 
 import com.example.models.ObjectResponseDTO;
 import com.example.models.PartidaResponseDTO;
-import com.master.demo.Entities.Objeto;
-import com.master.demo.Entities.Partida;
-import com.master.demo.Entities.PartidaKafka;
-import com.master.demo.Entities.Version;
+import com.master.demo.Entities.*;
 import com.master.demo.Kafka.KafkaProducer;
 import com.master.demo.Repositories.PartidaRepository;
 import com.master.demo.Repositories.VersionRepository;
@@ -26,6 +23,9 @@ import java.util.Optional;
 @Service
 public class PartidaServiceImpl implements PartidaService {
 
+    private static final String USUARIO= "santi";
+
+
     private final PartidaRepository partidaRepository;
     private final VersionRepository versionRepository;
     private final KafkaProducer kafkaProducer;
@@ -45,7 +45,20 @@ public class PartidaServiceImpl implements PartidaService {
         partida.setVersion(version.get());
         partida.setGastos(gastos);
         partida.setInformacion(informacion);
-        this.partidaRepository.save(partida);
+
+        Notificacion notificacion = new Notificacion();
+        notificacion.setPartida(partida);
+        notificacion.setUsuario(USUARIO);
+
+        try{
+            this.partidaRepository.save(partida);
+            notificacion.setMensaje("Partida insertada correctamente. Fecha: "+ java.time.LocalDate.now());
+        }catch (Exception e){
+            notificacion.setMensaje("Partida insertada incorrectamente. Fecha: "+ java.time.LocalDate.now());
+        }
+
+
+        this.kafkaProducer.insertNotificacion(notificacion);
     }
 
     @Override
