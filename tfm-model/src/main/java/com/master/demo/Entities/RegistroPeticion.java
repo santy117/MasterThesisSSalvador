@@ -21,11 +21,11 @@ public class RegistroPeticion {
 
     @OneToOne
     @JoinColumn(name= "ID_VERSION")
-    private Version idVersion;
+    private Version version;
 
     @OneToOne
     @JoinColumn(name= "ID_OBJETO")
-    private Objeto idObjeto;
+    private Objeto objeto;
 
     @Column(name= "TIPO_PETICION")
     private String tipoPeticion;

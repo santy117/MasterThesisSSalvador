@@ -1,10 +1,11 @@
 package com.master.demo.service.impl;
 
-import com.example.models.ObjectResponseDTO;
 import com.example.models.PartidaResponseDTO;
 import com.master.demo.Entities.*;
 import com.master.demo.Kafka.KafkaProducer;
+import com.master.demo.Repositories.ObjetoRepository;
 import com.master.demo.Repositories.PartidaRepository;
+import com.master.demo.Repositories.RegistroPeticionRepository;
 import com.master.demo.Repositories.VersionRepository;
 import com.master.demo.service.PartidaService;
 import org.apache.poi.ss.usermodel.*;
@@ -28,12 +29,16 @@ public class PartidaServiceImpl implements PartidaService {
 
     private final PartidaRepository partidaRepository;
     private final VersionRepository versionRepository;
+    private final ObjetoRepository objetoRepository;
+    private final RegistroPeticionRepository registroPeticionRepository;
     private final KafkaProducer kafkaProducer;
 
     @Autowired
-    public PartidaServiceImpl(final PartidaRepository partidaRepository, final VersionRepository versionRepository, final KafkaProducer kafkaProducer){
+    public PartidaServiceImpl(final PartidaRepository partidaRepository, final VersionRepository versionRepository, ObjetoRepository objetoRepository, RegistroPeticionRepository registroPeticionRepository, final KafkaProducer kafkaProducer){
         this.partidaRepository = partidaRepository;
         this.versionRepository = versionRepository;
+        this.objetoRepository = objetoRepository;
+        this.registroPeticionRepository = registroPeticionRepository;
         this.kafkaProducer = kafkaProducer;
     }
 
@@ -59,6 +64,9 @@ public class PartidaServiceImpl implements PartidaService {
 
 
         this.kafkaProducer.insertNotificacion(notificacion);
+
+        //Registramos la peticion de lectura del usuario en bbdd
+        registroPeticiones("ESCRITURA", idVersion );
     }
 
     @Override
@@ -73,6 +81,7 @@ public class PartidaServiceImpl implements PartidaService {
     }
 
     @Override
+    @Transactional
     public List<PartidaResponseDTO> getPartidasByIdVersion(Integer versionId) {
         List<PartidaResponseDTO> partidasResponseDTO = new ArrayList<>();
         List<Partida> objetos = this.partidaRepository.findPartidaByIdVersion(versionId);
@@ -84,6 +93,9 @@ public class PartidaServiceImpl implements PartidaService {
             partidaResponseDTO.setInformacion(objeto.getInformacion());
             partidasResponseDTO.add(partidaResponseDTO);
         });
+
+        //Registramos la peticion de lectura del usuario en bbdd
+        registroPeticiones("LECTURA", versionId );
         return partidasResponseDTO;
     }
 
@@ -134,5 +146,16 @@ public class PartidaServiceImpl implements PartidaService {
             e.printStackTrace();
         }
 
+    }
+
+    public void registroPeticiones(String tipoRegistro, Integer idVersion){
+        Objeto objeto = this.objetoRepository.findByIdVersion(idVersion);
+        Optional<Version> version = this.versionRepository.findById(idVersion);
+        RegistroPeticion registroPeticion = new RegistroPeticion();
+        registroPeticion.setTipoPeticion(tipoRegistro);
+        registroPeticion.setUsuario(USUARIO);
+        registroPeticion.setVersion(version.get());
+        registroPeticion.setObjeto(objeto);
+        this.registroPeticionRepository.save(registroPeticion);
     }
 }

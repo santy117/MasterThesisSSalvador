@@ -198,6 +198,34 @@ paths:
         "401":
           description: UNAUTH
 
+  /usuario/registroPeticiones/{usuario}:
+    parameters:
+      - name: usuario
+        description: user
+        schema:
+          type: string
+        in: path
+        required: true
+    get:
+      summary: Devuelve el registro de peticiones de un usuario.
+      tags:
+        - "Usuarios"
+      description: This is a description
+      operationId: getRegistroPeticiones
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RegistroPeticionesResponseDTO'
+        "400":
+          description: BAD REQUEST
+        "401":
+          description: UNAUTH
+
 components:
 
   schemas:
@@ -266,4 +294,25 @@ components:
         informacion:
           description: informacion de la partida
           type: string
+    RegistroPeticionesResponseDTO:
+      description: This is the registro peticiones response model
+      type: object
+      required:
+        - idPeticion
+        - tipoPeticion
+        - idObjeto
+        - idVersion
+      properties:
+        idPeticion:
+          description: id de la peticion
+          type: integer
+        tipoPeticion:
+          description: tipo de la peticion
+          type: string
+        idObjeto:
+          description: id del objeto
+          type: integer
+        idVersion:
+          description: id de la version
+          type: integer
 
