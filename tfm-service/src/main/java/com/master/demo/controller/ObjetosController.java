@@ -4,6 +4,7 @@ package com.master.demo.controller;
 import com.example.api.ObjetosApi;
 import com.example.models.ObjectDTO;
 import com.example.models.ObjectResponseDTO;
+import com.example.models.VersionDTO;
 import com.master.demo.service.ObjetoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,15 @@ public class ObjetosController implements ObjetosApi {
     @Override
     public ResponseEntity<Void> createObject(ObjectDTO body) {
         this.objetoService.createObject(body.getNombre());
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Void> createObjectVersion(VersionDTO body) {
+        System.out.println(body.getObjectId());
+        if(body.getObjectId()!=null){
+            this.objetoService.createVersion(body.getObjectId());
+        }
         return null;
     }
 

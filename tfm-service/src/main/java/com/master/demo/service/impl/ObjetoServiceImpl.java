@@ -51,6 +51,7 @@ public class ObjetoServiceImpl implements ObjetoService {
         this.versionRepository.save(version);
         objeto.setIdVersion(version);
         this.objetoRepository.save(objeto);
+        return;
     }
 
     @Override
@@ -71,5 +72,16 @@ public class ObjetoServiceImpl implements ObjetoService {
         objectResponseDTO.setIdVersion(objeto.getIdVersion().getIdVersion());
         objectResponseDTO.setNombre(objeto.getNombre());
         return objectResponseDTO;
+    }
+
+    @Override
+    @Transactional
+    public void createVersion(Integer objectId) {
+        Version version = new Version();
+        version.setIdObjeto(objectId);
+        version = this.versionRepository.save(version);
+        this.objetoRepository.updateVersion(version.getIdObjeto(), version.getIdVersion());
+        return;
+
     }
 }

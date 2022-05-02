@@ -103,6 +103,23 @@ paths:
           description: BAD REQUEST
         "401":
           description: UNAUTH
+  /objetos/nuevaVersion:
+    post:
+      summary: nueva version de objeto
+      tags:
+        - "Objetos"
+      description: This is a description
+      operationId: createObjectVersion
+      requestBody:
+        description: description
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VersionDTO'
+      responses:
+        "201":
+          description: CREATED
   /partidas:
 
     post:
@@ -239,6 +256,15 @@ components:
         nombre:
           description: nombre del objeto
           type: string
+    VersionDTO:
+      description: This is the object model
+      type: object
+      required:
+        - objectId
+      properties:
+        objectId:
+          description: id del objeto
+          type: integer
     ObjectResponseDTO:
       description: This is the object model
       type: object

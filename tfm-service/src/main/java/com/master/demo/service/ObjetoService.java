@@ -15,4 +15,6 @@ public interface ObjetoService {
     ObjectResponseDTO getObjectById(Integer objectId);
 
     ObjectResponseDTO getObjectByIdVersion(Integer versionId);
+
+    void createVersion(Integer objectId);
 }
