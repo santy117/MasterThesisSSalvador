@@ -77,6 +77,8 @@ public class PartidaServiceImpl implements PartidaService {
         partidaResponseDTO.setIdVersion(partida.get().getVersion().getIdVersion());
         partidaResponseDTO.setGastos(partida.get().getGastos());
         partidaResponseDTO.setInformacion(partida.get().getInformacion());
+        //Registramos la peticion de lectura del usuario en bbdd
+        registroPeticiones("LECTURA", partida.get().getVersion().getIdVersion() );
         return partidaResponseDTO;
     }
 
