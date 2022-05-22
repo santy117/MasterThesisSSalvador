@@ -24,7 +24,7 @@ import java.util.Optional;
 @Service
 public class PartidaServiceImpl implements PartidaService {
 
-    private static final String USUARIO= "santi";
+    private static final String USUARIO= "santiMOCK";
 
 
     private final PartidaRepository partidaRepository;
@@ -66,11 +66,11 @@ public class PartidaServiceImpl implements PartidaService {
         this.kafkaProducer.insertNotificacion(notificacion);
 
         //Registramos la peticion de lectura del usuario en bbdd
-        registroPeticiones("ESCRITURA", idVersion );
+        registroPeticiones("ESCRITURA", idVersion, USUARIO);
     }
 
     @Override
-    public PartidaResponseDTO getPartidaByIdPartida(Integer partidaId) {
+    public PartidaResponseDTO getPartidaByIdPartida(Integer partidaId, String user) {
         Optional<Partida> partida = this.partidaRepository.findById(partidaId);
         PartidaResponseDTO partidaResponseDTO = new PartidaResponseDTO();
         partidaResponseDTO.setIdPartida(partida.get().getIdPartida());
@@ -78,13 +78,13 @@ public class PartidaServiceImpl implements PartidaService {
         partidaResponseDTO.setGastos(partida.get().getGastos());
         partidaResponseDTO.setInformacion(partida.get().getInformacion());
         //Registramos la peticion de lectura del usuario en bbdd
-        registroPeticiones("LECTURA", partida.get().getVersion().getIdVersion() );
+        registroPeticiones("LECTURA", partida.get().getVersion().getIdVersion(), user);
         return partidaResponseDTO;
     }
 
     @Override
     @Transactional
-    public List<PartidaResponseDTO> getPartidasByIdVersion(Integer versionId) {
+    public List<PartidaResponseDTO> getPartidasByIdVersion(Integer versionId, String user) {
         List<PartidaResponseDTO> partidasResponseDTO = new ArrayList<>();
         List<Partida> objetos = this.partidaRepository.findPartidaByIdVersion(versionId);
         objetos.forEach(objeto -> {
@@ -97,7 +97,7 @@ public class PartidaServiceImpl implements PartidaService {
         });
 
         //Registramos la peticion de lectura del usuario en bbdd
-        registroPeticiones("LECTURA", versionId );
+        registroPeticiones("LECTURA", versionId, user );
         return partidasResponseDTO;
     }
 
@@ -150,12 +150,12 @@ public class PartidaServiceImpl implements PartidaService {
 
     }
 
-    public void registroPeticiones(String tipoRegistro, Integer idVersion){
+    public void registroPeticiones(String tipoRegistro, Integer idVersion, String user){
         Objeto objeto = this.objetoRepository.findByIdVersion(idVersion);
         Optional<Version> version = this.versionRepository.findById(idVersion);
         RegistroPeticion registroPeticion = new RegistroPeticion();
         registroPeticion.setTipoPeticion(tipoRegistro);
-        registroPeticion.setUsuario(USUARIO);
+        registroPeticion.setUsuario(user);
         registroPeticion.setVersion(version.get());
         registroPeticion.setObjeto(objeto);
         this.registroPeticionRepository.save(registroPeticion);

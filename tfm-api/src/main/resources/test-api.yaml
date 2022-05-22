@@ -170,6 +170,12 @@ paths:
           type: integer
         in: path
         required: true
+      - name: user
+        description: user
+        schema:
+          type: string
+        in: query
+        required: true
     get:
       summary: Devuelve partida por id de partida
       tags:
@@ -194,6 +200,12 @@ paths:
         schema:
           type: integer
         in: path
+        required: true
+      - name: user
+        description: user
+        schema:
+          type: string
+        in: query
         required: true
     get:
       summary: Devuelve todas las partidas de una version.

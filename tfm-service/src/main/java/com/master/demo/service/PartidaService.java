@@ -8,9 +8,9 @@ import java.util.List;
 public interface PartidaService {
     void insertarPartida( Integer idVersion, String gastos, String informacion);
 
-    PartidaResponseDTO getPartidaByIdPartida(Integer partidaId);
+    PartidaResponseDTO getPartidaByIdPartida(Integer partidaId, String user);
 
-    List<PartidaResponseDTO> getPartidasByIdVersion(Integer versionId);
+    List<PartidaResponseDTO> getPartidasByIdVersion(Integer versionId, String user);
 
     void importarPartidas(MultipartFile file);
 }

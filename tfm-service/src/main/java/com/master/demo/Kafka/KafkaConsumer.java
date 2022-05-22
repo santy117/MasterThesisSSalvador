@@ -41,6 +41,6 @@ public class KafkaConsumer{
 
     @KafkaListener(topics="my_topic3", groupId="my_group_id")
     public void getInfoIA(MensajeIA mensaje){
-        System.out.println("Message received: "+ mensaje.getGastos());
+        System.out.println("Message received: "+mensaje.getUsuario()+" - "+ mensaje.getVersiones());
     }
 }

@@ -1,11 +1,12 @@
 import requests
 import json
+import random
 
-idVersion = 0
+versiones = ''
 usuario = 'santi'
 numPartidas = 1
 menu_options = {
-    1: 'Seleccionar idVersion (0 por defecto)',
+    1: 'Seleccionar rango versiones a generar aleatorios(x - y)',
     2: 'Seleccionar usuario (santi por defecto)',
     3: 'Seleccionar numero de partidas a leer (1 por defecto)',
     4: 'Ejecutar',
@@ -17,9 +18,9 @@ def print_menu():
         print (key, '--', menu_options[key] )
 
 def option1():
-     value = input("Introduce el id de version:\n")
-     idVersion = int(value) 
-     return idVersion
+     value = input("Introduce el rango de versiones:\n")
+     versiones = value
+     return versiones
 
 def option2():
      value = input("Introduce el usuario:\n")
@@ -33,7 +34,10 @@ def option3():
 
 def option4():
      for i in range(numPartidas):
-        print('Leyendo partida numero '+ str(i))
+        versionMinima = int(versiones.split("-")[0])
+        versionMaxima = int(versiones.split("-")[1])
+        idVersion = random.randrange(versionMinima, versionMaxima, 1)
+        print('Leyendo partida numero '+ str(i)+ " para la version "+ str(idVersion))
         url = 'http://localhost:8080/partidas/version/' + str(idVersion) + '?user='+ usuario
         r = requests.get(url)
 
@@ -49,7 +53,7 @@ if __name__=='__main__':
             print('Por favor elige un numero')
         #Check what choice was entered and act accordingly
         if option == 1:
-           idVersion = option1()
+           versiones = option1()
         elif option == 2:
            usuario = option2()
         elif option == 3:

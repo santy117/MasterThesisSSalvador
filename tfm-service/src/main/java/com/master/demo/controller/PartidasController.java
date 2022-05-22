@@ -24,14 +24,14 @@ public class PartidasController implements PartidasApi {
 
 
     @Override
-    public ResponseEntity<PartidaResponseDTO> getPartidaById(Integer partidaId) {
-        PartidaResponseDTO partidaResponse = this.partidaService.getPartidaByIdPartida(partidaId);
+    public ResponseEntity<PartidaResponseDTO> getPartidaById(Integer partidaId, String user) {
+        PartidaResponseDTO partidaResponse = this.partidaService.getPartidaByIdPartida(partidaId, user);
         return new ResponseEntity<>(partidaResponse, HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<List<PartidaResponseDTO>> getPartidasByVersion(Integer versionId) {
-        List<PartidaResponseDTO> partidaResponse = this.partidaService.getPartidasByIdVersion(versionId);
+    public ResponseEntity<List<PartidaResponseDTO>> getPartidasByVersion(Integer versionId, String user) {
+        List<PartidaResponseDTO> partidaResponse = this.partidaService.getPartidasByIdVersion(versionId, user);
         return new ResponseEntity<>(partidaResponse, HttpStatus.OK);
     }
 
