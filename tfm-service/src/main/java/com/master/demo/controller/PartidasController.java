@@ -26,12 +26,16 @@ public class PartidasController implements PartidasApi {
     @Override
     public ResponseEntity<PartidaResponseDTO> getPartidaById(Integer partidaId, String user) {
         PartidaResponseDTO partidaResponse = this.partidaService.getPartidaByIdPartida(partidaId, user);
+        //Registramos la peticion de lectura del usuario en bbdd
+        this.partidaService.registroPeticiones("LECTURA", partidaResponse.getIdVersion(), user);
         return new ResponseEntity<>(partidaResponse, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<List<PartidaResponseDTO>> getPartidasByVersion(Integer versionId, String user) {
         List<PartidaResponseDTO> partidaResponse = this.partidaService.getPartidasByIdVersion(versionId, user);
+        //Registramos la peticion de lectura del usuario en bbdd
+        this.partidaService.registroPeticiones("LECTURA", versionId, user );
         return new ResponseEntity<>(partidaResponse, HttpStatus.OK);
     }
 
@@ -44,6 +48,8 @@ public class PartidasController implements PartidasApi {
     @Override
     public ResponseEntity<Void> insertPartida(PartidaDTO body) {
         this.partidaService.insertarPartida(body.getIdVersion(),body.getGastos(), body.getInformacion());
+        //Registramos la peticion de lectura del usuario en bbdd
+        this.partidaService.registroPeticiones("ESCRITURA", body.getIdVersion(), "santiMOCK");
         return null;
     }
 }

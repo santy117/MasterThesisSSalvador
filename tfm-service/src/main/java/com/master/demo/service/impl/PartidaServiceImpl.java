@@ -11,6 +11,7 @@ import com.master.demo.service.PartidaService;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -65,8 +66,7 @@ public class PartidaServiceImpl implements PartidaService {
 
         this.kafkaProducer.insertNotificacion(notificacion);
 
-        //Registramos la peticion de lectura del usuario en bbdd
-        registroPeticiones("ESCRITURA", idVersion, USUARIO);
+
     }
 
     @Override
@@ -77,12 +77,12 @@ public class PartidaServiceImpl implements PartidaService {
         partidaResponseDTO.setIdVersion(partida.get().getVersion().getIdVersion());
         partidaResponseDTO.setGastos(partida.get().getGastos());
         partidaResponseDTO.setInformacion(partida.get().getInformacion());
-        //Registramos la peticion de lectura del usuario en bbdd
-        registroPeticiones("LECTURA", partida.get().getVersion().getIdVersion(), user);
+
         return partidaResponseDTO;
     }
 
     @Override
+    @Cacheable("partidas")
     @Transactional
     public List<PartidaResponseDTO> getPartidasByIdVersion(Integer versionId, String user) {
         List<PartidaResponseDTO> partidasResponseDTO = new ArrayList<>();
@@ -96,8 +96,7 @@ public class PartidaServiceImpl implements PartidaService {
             partidasResponseDTO.add(partidaResponseDTO);
         });
 
-        //Registramos la peticion de lectura del usuario en bbdd
-        registroPeticiones("LECTURA", versionId, user );
+
         return partidasResponseDTO;
     }
 
@@ -149,7 +148,7 @@ public class PartidaServiceImpl implements PartidaService {
         }
 
     }
-
+    @Override
     public void registroPeticiones(String tipoRegistro, Integer idVersion, String user){
         Objeto objeto = this.objetoRepository.findByIdVersion(idVersion);
         Optional<Version> version = this.versionRepository.findById(idVersion);

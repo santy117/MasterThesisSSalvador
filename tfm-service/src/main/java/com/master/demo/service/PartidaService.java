@@ -13,4 +13,7 @@ public interface PartidaService {
     List<PartidaResponseDTO> getPartidasByIdVersion(Integer versionId, String user);
 
     void importarPartidas(MultipartFile file);
+
+
+    void registroPeticiones(String tipoRegistro, Integer idVersion, String user);
 }
