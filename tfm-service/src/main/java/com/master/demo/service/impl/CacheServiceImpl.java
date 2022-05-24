@@ -41,4 +41,15 @@ public class CacheServiceImpl implements CacheService {
             this.usuariosCacheRepository.save(usuariosCache);
         }
     }
+
+    @Override
+    public String getVersionesCacheadas(String usuario) {
+        Optional<String> versionesRep = this.usuariosCacheRepository.findVersionesByUsuario(usuario);
+        if(versionesRep.isPresent()) {
+            return this.usuariosCacheRepository.findVersionesByUsuario(usuario).get();
+        }else{
+            return "";
+        }
+
+    }
 }

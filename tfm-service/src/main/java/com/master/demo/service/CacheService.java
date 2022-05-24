@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface CacheService {
     void setUsuarioCache(String usuario, String versiones);
+
+    String getVersionesCacheadas(String usuario);
 }

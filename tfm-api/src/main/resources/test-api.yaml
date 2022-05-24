@@ -255,10 +255,27 @@ paths:
         "401":
           description: UNAUTH
 
+  /authentication:
+
+    post:
+      summary: autenticacion
+      tags:
+        - "Auth"
+      description: This is a description
+      operationId: authentication
+      requestBody:
+        description: description
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthDTO'
+      responses:
+        "201":
+          description: CREATED
 components:
 
   schemas:
-
     ObjectDTO:
       description: This is the object model
       type: object
@@ -353,4 +370,13 @@ components:
         idVersion:
           description: id de la version
           type: integer
+    AuthDTO:
+      description: This is the object model
+      type: object
+      required:
+        - usuario
+      properties:
+        usuario:
+          description: usuario
+          type: string
 
