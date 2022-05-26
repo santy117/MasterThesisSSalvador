@@ -1,5 +1,6 @@
 package com.master.demo.Kafka;
 
+import com.master.demo.Entities.LecturaPartida;
 import com.master.demo.Entities.Notificacion;
 import com.master.demo.Entities.Partida;
 import com.master.demo.Entities.PartidaKafka;
@@ -17,7 +18,7 @@ public class KafkaProducer {
 
     private static final String TOPIC= "my_topic";
     private static final String TOPIC_NOTIFICACIONES= "my_topic2";
-
+    private static final String TOPIC_LECTURA_PARTIDAS= "my_topic4";
     @Autowired
     private KafkaTemplate<String, Object> kafkaTemplate;
 
@@ -33,6 +34,11 @@ public class KafkaProducer {
     public void insertNotificacion(Notificacion notificacion){
         System.out.println("Insertando notificacion: "+ notificacion.getMensaje());
         this.kafkaTemplate.send(TOPIC_NOTIFICACIONES, notificacion);
+    }
+
+    public void lecturaPartida(LecturaPartida lecturaPartida){
+        System.out.println("Leyendo partidas de version: "+ lecturaPartida.getIdVersion());
+        this.kafkaTemplate.send(TOPIC_LECTURA_PARTIDAS, lecturaPartida);
     }
 
 }

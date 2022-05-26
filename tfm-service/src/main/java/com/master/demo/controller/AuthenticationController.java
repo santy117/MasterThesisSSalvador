@@ -27,7 +27,7 @@ public class AuthenticationController implements AuthenticationApi {
         String[] versionesArray = versiones.split(" ");
         for(String version : versionesArray){
             System.out.println("Cargando en cache las partidas de la version: "+ version + " para el usuario "+ body.getUsuario());
-            this.partidaService.getPartidasByIdVersion(Integer.parseInt(version), body.getUsuario());
+            this.partidaService.cachePartidasByIdVersionAsync(Integer.parseInt(version), body.getUsuario());
         }
 
         return null;

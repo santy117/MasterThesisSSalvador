@@ -1,9 +1,6 @@
 package com.master.demo.Kafka;
 
-import com.master.demo.Entities.MensajeIA;
-import com.master.demo.Entities.Notificacion;
-import com.master.demo.Entities.PartidaKafka;
-import com.master.demo.Entities.UsuariosCache;
+import com.master.demo.Entities.*;
 import com.master.demo.Repositories.UsuariosCacheRepository;
 import com.master.demo.service.CacheService;
 import com.master.demo.service.NotificacionService;
@@ -50,6 +47,13 @@ public class KafkaConsumer{
     public void getInfoIA(MensajeIA mensaje){
         System.out.println("Message received: "+mensaje.getUsuario()+" - "+ mensaje.getVersiones());
         this.cacheService.setUsuarioCache(mensaje.getUsuario(), mensaje.getVersiones());
+
+    }
+
+    @KafkaListener(topics="my_topic4", groupId="my_group_id")
+    public void getLecturaPartidas(LecturaPartida lecturaPartida){
+        System.out.println("Message received: "+lecturaPartida.getUsuario()+" - "+ lecturaPartida.getIdVersion());
+        this.partidaService.getPartidasByIdVersion(lecturaPartida.getIdVersion(), lecturaPartida.getUsuario());
 
     }
 }

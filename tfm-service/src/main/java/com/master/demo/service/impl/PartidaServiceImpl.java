@@ -159,4 +159,11 @@ public class PartidaServiceImpl implements PartidaService {
         registroPeticion.setObjeto(objeto);
         this.registroPeticionRepository.save(registroPeticion);
     }
+
+    @Override
+    public void cachePartidasByIdVersionAsync(Integer versionId, String user) {
+        LecturaPartida lecturaPartida = new LecturaPartida(versionId, user);
+        this.kafkaProducer.lecturaPartida(lecturaPartida);
+    }
+
 }

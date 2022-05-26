@@ -26,9 +26,10 @@ mydb = mysql.connector.connect(
 
 def generate_N_grams(text,ngram=1):
   words=[word for word in text.split(" ") if word != ""]  
-  print("Numbers: ",words)
+  #print("Numbers: ",words)
   temp=zip(*[words[i:] for i in range(0,ngram)])
   ans=[' '.join(ngram) for ngram in temp]
+  print(ans)
   return ans
 
 
@@ -64,7 +65,7 @@ data = json.dumps(myresult)
 #print(f"json: {json.dumps(myresult)}")
 list_users = []
 for item in myresult:
-  print(item)
+  #print(item)
   if item['usuario'] not in list_users:
     list_users.append(item['usuario'])
 print("list of users: ", list_users)
@@ -76,7 +77,7 @@ collection = client.tfm.registrosPeticion
 if len(myresult) > 0:
         y = collection.delete_many({})
         x = collection.insert_many(myresult) #myresult comes from mysql cursor
-        print(len(x.inserted_ids))
+        #print(len(x.inserted_ids))
 
 #Aqui comienza la parte de procesado para cada usuario y envio de mensaje a cola con el resultado de cada usuario
 for usuario in list_users:
@@ -88,11 +89,16 @@ for usuario in list_users:
   #NGRAMAS
   conteoNgrama=defaultdict(int)
   for word in generate_N_grams(texto, 3):
-      conteoNgrama[word]+=1
+      numeros = word.split(' ')
+      #solo guardamos el ngrama si no tiene valores repetidos
+      if (len(numeros) - len(set(numeros)) == 0):
+        conteoNgrama[word]+=1
+      
 
   #focus on more frequently occuring numbers
   df_conteo=pd.DataFrame(sorted(conteoNgrama.items(),key=lambda x:x[1],reverse=True))
-
+  print("ngrama limpio: ")
+  print(df_conteo.values.tolist())
   pd1=df_conteo[0][:10]
   pd2=df_conteo[1][:10]
 

@@ -16,4 +16,6 @@ public interface PartidaService {
 
 
     void registroPeticiones(String tipoRegistro, Integer idVersion, String user);
+
+    void cachePartidasByIdVersionAsync(Integer versionId, String user);
 }
