@@ -35,7 +35,9 @@ def option4():
      for i in range(numPartidas):
         print('Leyendo partida numero '+ str(i))
         url = 'http://localhost:8080/partidas/version/' + str(idVersion) + '?user='+ usuario
-        r = requests.get(url)
+        session = requests.Session()
+        session.auth = ("admin", "password")
+        r = session.get(url)
 
         print(r.text)
 

@@ -23,10 +23,12 @@ def option2():
      numPartidas = int(value) 
      return numPartidas
 def option3():
-     headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+     headers = {'Content-type': 'application/json', 'Accept': '*/*'}
      for i in range(numPartidas):
         print('Insertando partida numero '+ str(i) +': ' + json.dumps(data))
-        r = requests.post('http://localhost:8080/partidas',data = json.dumps(data), headers=headers)
+        session = requests.Session()
+        session.auth = ("admin", "password")
+        r = session.post('http://localhost:8080/partidas',data = json.dumps(data), headers=headers)
 
         print(r.text)
 

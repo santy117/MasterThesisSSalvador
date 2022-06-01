@@ -39,7 +39,9 @@ def option4():
         idVersion = random.randrange(versionMinima, versionMaxima, 1)
         print('Leyendo partida numero '+ str(i)+ " para la version "+ str(idVersion))
         url = 'http://localhost:8080/partidas/version/' + str(idVersion) + '?user='+ usuario
-        r = requests.get(url)
+        session = requests.Session()
+        session.auth = ("admin", "password")
+        r = session.get(url)
 
         print(r.text)
 
