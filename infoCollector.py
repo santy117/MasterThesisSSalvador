@@ -4,6 +4,8 @@ import json
 from bson import json_util
 from kafka import KafkaProducer
 from pymongo import MongoClient
+import random
+from scipy import stats 
 
 import numpy as np
 import pandas as pd
@@ -17,6 +19,22 @@ mydb = mysql.connector.connect(
   password="password",
   database="tfm"
 )
+
+#IA PARAMETERS weighted random choices
+#random.choices(population, weights=None, *, cum_weights=None, k=1)
+#population: It is is sequence or data structure from which you want to choose data.
+#weights or cum_weights: Define the selection probability for each element.
+#weights: If a weights sequence is specified, random selections are made according to the relative weights.
+#cum_weights: Alternatively, if a cum_weights sequence is given, the random selections are made according to the cumulative weights.
+#k: The number of samples you want from a population.
+#alpha: wight of the element with most probabilities
+#Probability = element_weight/ sum of all weights
+alpha = 0.8
+
+
+#IA PARAMETERS Probability based on number of occurences
+#probability = number of occurences of the pattern / total number of occurences 
+
 
 
 #method to generate n-grams:
@@ -102,8 +120,35 @@ for usuario in list_users:
   pd1=df_conteo[0][:10]
   pd2=df_conteo[1][:10]
 
-  plot_ngrama(pd1,pd2, "trigrama", usuario)
+  #plot_ngrama(pd1,pd2, "trigrama", usuario)
 
-  version_mas_probable = df_conteo[0][0]
-  print("Version mas probable de trigrama: "+ version_mas_probable)
-  send_kafka_message(usuario, version_mas_probable)
+#Probability based on alpha parameter
+#GEOMETRIC DISTRIBUTION p(r;p)=p(1−p)r−1
+  geometrica = stats.geom(alpha) # Distribución
+  x = np.arange(geometrica.ppf(0.0001),
+              geometrica.ppf(0.9999))
+  fmp = geometrica.pmf(x) # Función de Masa de Probabilidad
+  weights_p = []
+  for i in range(pd1.size):
+    if(0 <= i < fmp.size):
+      weights_p.append(fmp[i])
+    else:
+      weights_p.append(0)
+
+  print(str(weights_p))
+  version_mas_probable_alpha = random.choices(pd1, weights=weights_p, k=1)
+
+#Probability based on number of occurences
+  weights_number = []
+  total_weight = 0
+  for i in range(pd1.size):
+    total_weight = total_weight + int(df_conteo[1][i])
+  
+  print("total weight " + str(total_weight))
+  for j in range(pd1.size):
+    weights_number.append(df_conteo[1][j] / total_weight)
+  print("pesos basados en numero de apariciones: " + str(weights_number))
+  version_mas_probable_number = random.choices(pd1, weights=weights_number, k=1)
+  print("Version mas probable de trigrama con parametro alpha: "+ str(version_mas_probable_alpha))
+  print("Version mas probable de trigrama con pesos basados en numero de apariciones: "+ str(version_mas_probable_number))
+  #send_kafka_message(usuario, str(version_mas_probable_alpha))
