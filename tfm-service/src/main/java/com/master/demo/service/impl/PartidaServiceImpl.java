@@ -3,10 +3,7 @@ package com.master.demo.service.impl;
 import com.example.models.PartidaResponseDTO;
 import com.master.demo.Entities.*;
 import com.master.demo.Kafka.KafkaProducer;
-import com.master.demo.Repositories.ObjetoRepository;
-import com.master.demo.Repositories.PartidaRepository;
-import com.master.demo.Repositories.RegistroPeticionRepository;
-import com.master.demo.Repositories.VersionRepository;
+import com.master.demo.Repositories.*;
 import com.master.demo.service.PartidaService;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -31,16 +28,19 @@ public class PartidaServiceImpl implements PartidaService {
     private final PartidaRepository partidaRepository;
     private final VersionRepository versionRepository;
     private final ObjetoRepository objetoRepository;
+    private final NotificacionRepository notificacionRepository;
     private final RegistroPeticionRepository registroPeticionRepository;
     private final KafkaProducer kafkaProducer;
 
     @Autowired
-    public PartidaServiceImpl(final PartidaRepository partidaRepository, final VersionRepository versionRepository, ObjetoRepository objetoRepository, RegistroPeticionRepository registroPeticionRepository, final KafkaProducer kafkaProducer){
+    public PartidaServiceImpl(final PartidaRepository partidaRepository, final VersionRepository versionRepository, ObjetoRepository objetoRepository,
+                              RegistroPeticionRepository registroPeticionRepository, final KafkaProducer kafkaProducer, final NotificacionRepository notificacionRepository){
         this.partidaRepository = partidaRepository;
         this.versionRepository = versionRepository;
         this.objetoRepository = objetoRepository;
         this.registroPeticionRepository = registroPeticionRepository;
         this.kafkaProducer = kafkaProducer;
+        this.notificacionRepository = notificacionRepository;
     }
 
     @Override
@@ -88,7 +88,9 @@ public class PartidaServiceImpl implements PartidaService {
         List<PartidaResponseDTO> partidasResponseDTO = new ArrayList<>();
         List<Partida> objetos = this.partidaRepository.findPartidaByIdVersion(versionId);
         objetos.forEach(objeto -> {
+            Notificacion notificacion = this.notificacionRepository.findByIdPartida(objeto.getIdPartida());
             PartidaResponseDTO partidaResponseDTO = new PartidaResponseDTO();
+            partidaResponseDTO.setUsuario(notificacion.getUsuario());
             partidaResponseDTO.setIdPartida(objeto.getIdPartida());
             partidaResponseDTO.setIdVersion(objeto.getVersion().getIdVersion());
             partidaResponseDTO.setGastos(objeto.getGastos());

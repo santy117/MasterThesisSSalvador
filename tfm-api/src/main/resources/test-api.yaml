@@ -336,6 +336,7 @@ components:
         - idVersion
         - gastos
         - informacion
+        - usuario
       properties:
         idPartida:
           description: id de la partida
@@ -348,6 +349,9 @@ components:
           type: string
         informacion:
           description: informacion de la partida
+          type: string
+        usuario:
+          description: usuario que registro la partida
           type: string
     RegistroPeticionesResponseDTO:
       description: This is the registro peticiones response model
