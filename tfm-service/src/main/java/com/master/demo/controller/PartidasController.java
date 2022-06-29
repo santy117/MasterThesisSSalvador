@@ -46,6 +46,12 @@ public class PartidasController implements PartidasApi {
     }
 
     @Override
+    public ResponseEntity<Void> importarPartidasSync(MultipartFile file) {
+        this.partidaService.importarPartidasSync(file);
+        return null;
+    }
+
+    @Override
     public ResponseEntity<Void> insertPartida(PartidaDTO body) {
         this.partidaService.insertarPartida(body.getIdVersion(),body.getGastos(), body.getInformacion());
         //Registramos la peticion de lectura del usuario en bbdd

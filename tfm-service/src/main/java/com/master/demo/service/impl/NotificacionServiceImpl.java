@@ -17,6 +17,6 @@ public class NotificacionServiceImpl implements NotificacionService {
     }
     @Override
     public void insertNotificacion(Notificacion notificacion) {
-        this.notificacionRepository.save(notificacion);
+        //this.notificacionRepository.save(notificacion);
     }
 }

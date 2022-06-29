@@ -106,8 +106,10 @@ for usuario in list_users:
 
   #NGRAMAS
   conteoNgrama=defaultdict(int)
+  conteoNgramaSinFiltrar = defaultdict(int)
   for word in generate_N_grams(texto, 3):
       numeros = word.split(' ')
+      conteoNgramaSinFiltrar[word]+=1
       #solo guardamos el ngrama si no tiene valores repetidos
       if (len(numeros) - len(set(numeros)) == 0):
         conteoNgrama[word]+=1
@@ -115,8 +117,11 @@ for usuario in list_users:
 
   #focus on more frequently occuring numbers
   df_conteo=pd.DataFrame(sorted(conteoNgrama.items(),key=lambda x:x[1],reverse=True))
+  df_conteo_sin_filtrar=pd.DataFrame(sorted(conteoNgramaSinFiltrar.items(),key=lambda x:x[1],reverse=True))
   print("ngrama limpio: ")
   print(df_conteo.values.tolist())
+  print("ngrama sin limpiar: ")
+  print(df_conteo_sin_filtrar.values.tolist())
   pd1=df_conteo[0][:10]
   pd2=df_conteo[1][:10]
 

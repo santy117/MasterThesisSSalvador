@@ -14,6 +14,7 @@ public interface PartidaService {
 
     void importarPartidas(MultipartFile file);
 
+    void importarPartidasSync(MultipartFile file);
 
     void registroPeticiones(String tipoRegistro, Integer idVersion, String user);
 

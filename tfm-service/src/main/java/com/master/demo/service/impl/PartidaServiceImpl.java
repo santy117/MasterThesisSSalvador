@@ -57,14 +57,15 @@ public class PartidaServiceImpl implements PartidaService {
         notificacion.setUsuario(USUARIO);
 
         try{
-            this.partidaRepository.save(partida);
+            Partida partidaInsertada = this.partidaRepository.save(partida);
+            //borramos partida para tests jmeter
+            this.partidaRepository.deleteById(partidaInsertada.getIdPartida());
+            System.out.println("Insertando partida: " + partidaInsertada.getIdPartida());
             notificacion.setMensaje("Partida insertada correctamente. Fecha: "+ java.time.LocalDate.now());
         }catch (Exception e){
             notificacion.setMensaje("Partida insertada incorrectamente. Fecha: "+ java.time.LocalDate.now());
         }
-
-
-        this.kafkaProducer.insertNotificacion(notificacion);
+       // this.kafkaProducer.insertNotificacion(notificacion);
 
 
     }
@@ -90,7 +91,9 @@ public class PartidaServiceImpl implements PartidaService {
         objetos.forEach(objeto -> {
             Notificacion notificacion = this.notificacionRepository.findByIdPartida(objeto.getIdPartida());
             PartidaResponseDTO partidaResponseDTO = new PartidaResponseDTO();
-            partidaResponseDTO.setUsuario(notificacion.getUsuario());
+            if(notificacion != null){
+                partidaResponseDTO.setUsuario(notificacion.getUsuario());
+            }
             partidaResponseDTO.setIdPartida(objeto.getIdPartida());
             partidaResponseDTO.setIdVersion(objeto.getVersion().getIdVersion());
             partidaResponseDTO.setGastos(objeto.getGastos());
@@ -145,6 +148,54 @@ public class PartidaServiceImpl implements PartidaService {
 
             });
             this.kafkaProducer.insertPartidas(listaPartidas);
+        }catch(final IOException e){
+            e.printStackTrace();
+        }
+
+    }
+    @Override
+    public void importarPartidasSync(MultipartFile file) {
+        try{
+            Workbook workbook = new XSSFWorkbook(file.getInputStream());
+            Sheet datatypeSheet = workbook.getSheetAt(0);
+            Iterator<Row> iterator = datatypeSheet.iterator();
+            List<Partida> listaPartidas = new ArrayList<Partida>();
+            while (iterator.hasNext()) {
+                Partida partida = new Partida();
+                Row currentRow = iterator.next();
+                Iterator<Cell> cellIterator = currentRow.iterator();
+                if(currentRow.getRowNum()>0){
+                    while (cellIterator.hasNext()) {
+                        Cell currentCell = cellIterator.next();
+                        int columna =  currentCell.getAddress().getColumn();
+                        switch (columna){
+                            case 0:
+                                int idVersion = (int) currentCell.getNumericCellValue();
+                                Optional<Version> version = this.versionRepository.findById(idVersion);
+                                partida.setVersion(version.get());
+                                break;
+
+                            case 1:
+                                String gastos = currentCell.getStringCellValue();
+                                partida.setGastos(gastos);
+                                break;
+
+                            case 2:
+                                String informacion = currentCell.getStringCellValue();
+                                partida.setInformacion(informacion);
+                                break;
+                        }
+
+
+                    }
+                    listaPartidas.add(partida);
+                }
+
+            }
+            listaPartidas.forEach(partida -> {
+                this.insertarPartida(partida.getVersion().getIdVersion(), partida.getGastos(), partida.getInformacion());
+            });
+
         }catch(final IOException e){
             e.printStackTrace();
         }
