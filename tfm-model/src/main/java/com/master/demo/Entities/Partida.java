@@ -1,13 +1,17 @@
 package com.master.demo.Entities;
 
+import javax.persistence.*;
+
+
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 
-@Entity // This tells Hibernate to make a table out of this class
+
+@Entity
 @Data
 @Table(name = "PARTIDA")
 @NoArgsConstructor

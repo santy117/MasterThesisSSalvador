@@ -1,5 +1,5 @@
 import mysql.connector
-from time import sleep
+import time
 import json
 from bson import json_util
 from kafka import KafkaProducer
@@ -12,7 +12,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from collections import defaultdict
 plt.style.use(style='seaborn')
-
+start_time = time.time()
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
@@ -47,7 +47,7 @@ def generate_N_grams(text,ngram=1):
   #print("Numbers: ",words)
   temp=zip(*[words[i:] for i in range(0,ngram)])
   ans=[' '.join(ngram) for ngram in temp]
-  print(ans)
+  #print(ans)
   return ans
 
 
@@ -65,12 +65,12 @@ def send_kafka_message(user, prediction):
   producer.flush()
 
 def plot_ngrama(x, y, tipo, usuario):
-  plt.figure(1,figsize=(16,4))
+  plt.figure(1,figsize=(8,5))
   plt.bar(x,y, color ='green',
-          width = 0.4)
-  plt.xlabel("Object versions reviewed by the user "+ usuario)
-  plt.ylabel("Count")
-  plt.title("Top 10 object versions reviewed by user "+usuario+"-"+tipo+" analysis")
+          width = 0.8)
+  plt.xlabel("Object versions reviewed by the user "+ usuario, fontsize = 16)
+  plt.ylabel("Count", fontsize = 16)
+  plt.title("Top 10 object versions reviewed by user "+usuario+"-"+tipo+" analysis", fontsize = 16)
   plt.savefig(tipo+".png")
   plt.show()
 
@@ -99,6 +99,7 @@ if len(myresult) > 0:
 
 #Aqui comienza la parte de procesado para cada usuario y envio de mensaje a cola con el resultado de cada usuario
 for usuario in list_users:
+  print("user: "+ usuario)
   texto = ""
   for item in myresult:
     if item['usuario'] == usuario:
@@ -118,10 +119,10 @@ for usuario in list_users:
   #focus on more frequently occuring numbers
   df_conteo=pd.DataFrame(sorted(conteoNgrama.items(),key=lambda x:x[1],reverse=True))
   df_conteo_sin_filtrar=pd.DataFrame(sorted(conteoNgramaSinFiltrar.items(),key=lambda x:x[1],reverse=True))
-  print("ngrama limpio: ")
-  print(df_conteo.values.tolist())
-  print("ngrama sin limpiar: ")
-  print(df_conteo_sin_filtrar.values.tolist())
+  #print("ngrama limpio: ")
+  #print(df_conteo.values.tolist())
+  #print("ngrama sin limpiar: ")
+  #print(df_conteo_sin_filtrar.values.tolist())
   pd1=df_conteo[0][:10]
   pd2=df_conteo[1][:10]
 
@@ -157,3 +158,4 @@ for usuario in list_users:
   print("Version mas probable de trigrama con parametro alpha: "+ str(version_mas_probable_alpha[0]))
   print("Version mas probable de trigrama con pesos basados en numero de apariciones: "+ str(version_mas_probable_number[0]))
   send_kafka_message(usuario, str(version_mas_probable_alpha[0]))
+print("--- %s seconds ---" % (time.time() - start_time))
